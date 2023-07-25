@@ -1,13 +1,14 @@
 import pandas as pd
 import paramiko
+import getpass
 
-def establish_ssh_connection(hostname, username, password):
+def establish_ssh_connection(hostname, port, username, password):
     # Create an SSH client
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     # Connect to the remote server
-    client.connect(hostname, username=username, password=password)
+    client.connect(hostname, port, username=username, password=password)
 
     return client
 
@@ -44,12 +45,13 @@ def extract_values(chage_output):
 
 def main():
     # SSH Connection details
-    remote_hostname = '172.16.16.6'
-    remote_username = 'root'
-    remote_password = 'toor'
+    remote_hostname = input("Enter Remote Server IP : ")
+    remote_port = 22
+    remote_username = input("Enter Username : ")
+    remote_password = getpass.getpass("Enter Password : ")
 
     # Establish the SSH connection
-    ssh_client = establish_ssh_connection(remote_hostname, remote_username, remote_password)
+    ssh_client = establish_ssh_connection(remote_hostname,remote_port, remote_username, remote_password)
 
     try:
         # Get hostname
